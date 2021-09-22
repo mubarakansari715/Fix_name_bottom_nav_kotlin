@@ -14,6 +14,7 @@ import com.example.kotlin_28_7_2021.ModelClass.PersonModelClass
 import com.example.kotlin_28_7_2021.ModelClass.RecycelViewModelClass
 import com.example.kotlin_28_7_2021.R
 import com.example.kotlin_28_7_2021.RecycelViewApiInterfacea
+import com.facebook.shimmer.ShimmerFrameLayout
 import kotlinx.android.synthetic.main.fragment_home.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -37,13 +38,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun getData(view: View?) {
-        val prog = ProgressDialog(requireActivity())
-        prog.setTitle("Checking Network")
-        prog.setMessage("Please wait few minutes")
-        //prog.setFeatureDrawable(R.drawable.ic_launcher_background)
-        prog.setCancelable(false)
-        Handler().postDelayed({ prog.dismiss() }, 2000)
-        prog.show()
         val retrofitBuilder = Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl(StringUrl)
@@ -65,9 +59,16 @@ class HomeFragment : Fragment() {
                 for (m in responseBody) {
                     listData.add(RecycelViewModelClass(m.id, m.title, m.url))
                 }
+                //shimmer code
+                shimmerLayout.stopShimmerAnimation()
+                shimmerLayout.visibility =View.GONE
+
+                //setAdapter code
                 val myAdapter = RecycelViewAdapters(requireActivity(), listData)
                 recycal_view.layoutManager = LinearLayoutManager(requireContext())
                 recycal_view.adapter = myAdapter
+                recycal_view.visibility = View.VISIBLE
+
 
             }
 
@@ -76,6 +77,9 @@ class HomeFragment : Fragment() {
             }
         })
 
+
+    }
+    fun dialogbox(){
 
     }
 
